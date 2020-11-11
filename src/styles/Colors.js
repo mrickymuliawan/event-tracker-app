@@ -11,6 +11,7 @@ const Colors = {
   orange: '#FFCA28',
   darkOrange: '#FFA726',
   lightOrange: '#FFE082',
-  red: '#E53935'
+  red: '#E53935',
+  green: '#2ECC71'
 }
 export default Colors

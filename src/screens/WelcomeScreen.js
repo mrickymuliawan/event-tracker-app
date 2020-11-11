@@ -31,7 +31,7 @@ const WelcomeScreen = (props) => {
       const unix = moment().unix()
       const body = {
         id: unix,
-        name: name
+        name: name.toLowerCase()
       }
       const res = await baseAxios.patch(`/users/${unix}/.json`, body)
       dispatch(updateUser(res.data))

@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: FontSize.lg,
     fontWeight: 'bold',
-    color: '#2ECC71',
+    color: Colors.green,
   },
   date: {
     fontSize: FontSize.md,

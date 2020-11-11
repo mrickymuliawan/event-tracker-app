@@ -15,7 +15,10 @@ const EventCard = ({ item, onPress }) => {
         <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.subtitle}>At {item.location}</Text>
         <Section>
-          <Text>{formatDate(item.date)}</Text>
+          <Row style={{ justifyContent: 'space-between', paddingRight: Padding.lg }}>
+            <Text style={{ color: Colors.green }}>{item.price > 0 ? 'Paid' : 'Free'}</Text>
+            <Text>{formatDate(item.date)}</Text>
+          </Row>
         </Section>
         <Section>
           <Text style={{ color: Colors.blue }}>See Detail</Text>
