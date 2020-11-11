@@ -1,11 +1,11 @@
 import React from 'react'
-import { FlatList, Image, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import { Grid, Row } from 'react-native-easy-grid'
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Col, Grid, Row } from 'react-native-easy-grid'
 import { useDispatch, useSelector } from 'react-redux'
 import EventCardTile from '../components/EventCardTile'
 import Section from '../components/Section'
 import { updateUser } from '../redux/userAction'
-import { FontSize, Padding } from '../styles'
+import { Colors, FontSize, Padding } from '../styles'
 import baseAxios from '../utils/baseAxios'
 import { currencyFormat, formatDate } from '../utils/helpers'
 
@@ -36,56 +36,60 @@ const EventDetailScreen = ({ route, navigation }) => {
 
   return (
 
-    <ScrollView>
-      <Grid >
-        <Row size={10}>
-          <Image source={{ uri: item.imageUrl }} style={styles.image} />
-        </Row>
-        <Row size={50}>
+    <Grid >
+      <Row size={50}>
+        <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      </Row>
+      <Col size={100} style={styles.container}>
+        <ScrollView>
+          <Section>
+            <Text style={styles.title}>{item.name}</Text>
+            <Text style={styles.subtitle}>At {item.location}</Text>
+          </Section>
+          <Section>
+            <Text style={styles.price}>
+              {
+                item.price == 0 ?
+                  'Free Entry'
+                  :
+                  'IDR ' + currencyFormat(item.price)
+              }
+            </Text>
+          </Section>
 
-          <View style={styles.container}>
-            <Section>
-              <Text style={styles.title}>{item.name}</Text>
-              <Text style={styles.subtitle}>At {item.location}</Text>
-            </Section>
-            <Section>
-              <Text style={styles.price}>
-                {
-                  item.price == 0 ?
-                    'Free Entry'
-                    :
-                    currencyFormat(item.price)
-                }
-              </Text>
-            </Section>
+          <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={styles.date}>{formatDate(item.date)}</Text>
+            {
+              (user.trackedEvents || []).some(eventId => eventId == item.id) ?
+                <TouchableOpacity style={styles.buttonDisabled} disabled onPress={trackEvent}>
+                  <Text style={[styles.subtitle]}>Tracked</Text>
+                </TouchableOpacity>
+                :
+                <TouchableOpacity style={styles.button} onPress={trackEvent}>
+                  <Text style={[styles.subtitle, { color: 'white' }]}>Track Event</Text>
+                </TouchableOpacity>
+            }
 
-            <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={styles.date}>{formatDate(item.date)}</Text>
-              <TouchableOpacity style={styles.button} onPress={trackEvent}>
-                <Text style={[styles.subtitle, { color: 'white' }]}>Track Event</Text>
-              </TouchableOpacity>
-            </Row>
+          </Row>
 
-            <Section>
-              <Text style={styles.subtitle}>Other Events</Text>
+          <Section>
+            <Text style={styles.subtitle}>Other Events</Text>
 
-              <FlatList
-                horizontal={true}
-                data={eventList}
-                renderItem={({ item, index }) => <EventCardTile
-                  item={item}
-                  key={index}
-                  onPress={() => navigation.navigate('EventDetailScreen', { item })}
-                />}
-                keyExtractor={({ index }) => index} />
+            <FlatList
+              horizontal={true}
+              data={eventList}
+              renderItem={({ item, index }) => <EventCardTile
+                item={item}
+                key={index}
+                onPress={() => navigation.navigate('EventDetailScreen', { item })}
+              />}
+              keyExtractor={({ index }) => index} />
 
-            </Section>
-          </View>
+          </Section>
+        </ScrollView>
+      </Col>
 
-        </Row>
-
-      </Grid>
-    </ScrollView>
+    </Grid>
   )
 }
 
@@ -93,7 +97,6 @@ export default EventDetailScreen
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 12,
     backgroundColor: 'white',
     borderTopLeftRadius: 32,
@@ -104,7 +107,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   image: {
-    height: 250,
     width: '100%',
     resizeMode: 'contain'
   },
@@ -114,11 +116,17 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 8,
-    backgroundColor: '#2196F3',
+    backgroundColor: Colors.darkOrange,
+    padding: Padding.xs,
+  },
+  buttonDisabled: {
+    borderRadius: 8,
+    backgroundColor: Colors.lightGray,
     padding: Padding.xs,
   },
   price: {
-    fontSize: FontSize.md,
+    fontSize: FontSize.lg,
+    fontWeight: 'bold',
     color: '#2ECC71',
   },
   date: {

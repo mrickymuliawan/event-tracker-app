@@ -10,6 +10,7 @@ import baseAxios from '../utils/baseAxios'
 
 const EventListScreen = ({ navigation }) => {
   const [isGrid, setisGrid] = useState(false)
+  const [orderDesc, setorderDesc] = useState(false)
   const [loading, setloading] = useState(false)
 
   const user = useSelector(state => state.user)
@@ -27,7 +28,6 @@ const EventListScreen = ({ navigation }) => {
     didMount()
   }, [])
 
-
   return (
     <Grid >
       <Row size={20} style={{ justifyContent: 'space-between', alignItems: 'center', padding: Padding.sm }}>
@@ -36,44 +36,58 @@ const EventListScreen = ({ navigation }) => {
           <Text style={{ fontSize: FontSize.xxl }}>{user.name}</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text>List</Text>
+          <Text>Show Grid</Text>
           <Switch
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isGrid ? "#f5dd4b" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
+            trackColor={{ false: Colors.lightGray, true: Colors.darkBlue }}
+            thumbColor={isGrid ? Colors.blue : Colors.lightBlue}
+            ios_backgroundColor={Colors.lightGray}
             onValueChange={() => setisGrid(prevState => !prevState)}
             value={isGrid}
             style={{ marginHorizontal: Margin.xs }}
           />
-          <Text>Grid</Text>
         </View>
       </Row>
 
       <Col size={100} style={styles.container}>
         {loading && <Text style={{ alignSelf: 'center' }}>Loading..</Text>}
-        <View style={{ padding: Padding.sm }}>
+        <View style={{ padding: Padding.sm, flexDirection: 'row', justifyContent: 'space-between' }}>
+
           <Text style={{ fontSize: FontSize.xl, fontWeight: 'bold' }}>Event List</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
+            <Text>Sort By Oldest</Text>
+            <Switch
+              trackColor={{ false: Colors.gray, true: "#81b0ff" }}
+              thumbColor={isGrid ? Colors.blue : Colors.lightBlue}
+              ios_backgroundColor={Colors.lightGray}
+              onValueChange={() => setorderDesc(prevState => !prevState)}
+              value={orderDesc}
+              style={{ marginHorizontal: Margin.xs }}
+            />
+          </View>
         </View>
         {
           isGrid ?
             <FlatList
               key='grid'
-              data={eventList}
+              data={orderDesc ? eventList.slice(0).reverse() : eventList}
               renderItem={({ item, index }) => <EventCardTile
                 item={item}
                 key={index}
                 onPress={() => navigation.navigate('EventDetailScreen', { item, user })}
               />}
-              numColumns={2} />
+              numColumns={3}
+              keyExtractor={({ index }) => index} />
             :
             <FlatList
               key='list'
-              data={eventList}
+              data={orderDesc ? eventList.slice(0).reverse() : eventList}
               renderItem={({ item, index }) => <EventCard
                 item={item}
                 key={index}
                 onPress={() => navigation.navigate('EventDetailScreen', { item, user })} />}
-              numColumns={1} />
+              numColumns={1}
+              keyExtractor={({ index }) => index} />
         }
       </Col>
 

@@ -5,15 +5,9 @@ export const formatDate = (date) => {
 }
 
 
-export function currencyFormat(number, user = null) {
-  let countryCode = 'ID'
-  let currency = 'IDR'
+export function currencyFormat(number) {
+  return number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.")
 
-  const result = new Intl.NumberFormat(countryCode, {
-    style: 'currency', currency: currency, minimumFractionDigits: 0
-  }).format(number)
-
-  return result
 }
 
 

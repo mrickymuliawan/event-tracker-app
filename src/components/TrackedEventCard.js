@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { Col, Grid, Row } from 'react-native-easy-grid'
+import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Col, Row } from 'react-native-easy-grid'
 import { Colors, FontSize, Margin, Padding } from '../styles'
 import { formatDate } from '../utils/helpers'
 import Section from './Section'
@@ -20,7 +20,7 @@ const TrackedEventCard = ({ item, onPress, onRemove }) => {
         <Row style={{ justifyContent: 'space-between' }}>
 
           <TouchableOpacity onPress={onPress}>
-            <Text style={{ color: Colors.blue }}>See More</Text>
+            <Text style={{ color: Colors.blue }}>See Detail</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onRemove}>
             <Text style={{ color: Colors.red }}>Remove</Text>

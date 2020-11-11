@@ -18,7 +18,7 @@ const EventCard = ({ item, onPress }) => {
           <Text>{formatDate(item.date)}</Text>
         </Section>
         <Section>
-          <Text style={{ color: Colors.blue }}>See More</Text>
+          <Text style={{ color: Colors.blue }}>See Detail</Text>
         </Section>
       </Col>
     </Row>

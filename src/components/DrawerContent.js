@@ -3,7 +3,7 @@ import React from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUser } from '../redux/userAction'
-import { FontSize, Padding } from '../styles'
+import { FontSize, Margin, Padding } from '../styles'
 import baseAxios from '../utils/baseAxios'
 import TrackedEventCard from './TrackedEventCard'
 
@@ -26,7 +26,7 @@ const DrawerContent = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: FontSize.lg }}>My Tracked Events</Text>
+      <Text style={{ fontSize: FontSize.lg, marginVertical: Margin.sm }}>My Tracked Events</Text>
       <FlatList
         data={userTracked}
         renderItem={({ item, index }) => <TrackedEventCard

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, Keyboard } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import { FontSize, Margin, Padding } from '../styles'
 import baseAxios from '../utils/baseAxios'
@@ -13,10 +13,15 @@ const WelcomeScreen = (props) => {
   const dispatch = useDispatch()
 
   const submit = async () => {
+    Keyboard.dismiss()
+    if (!name) {
+      return alert('Please enter your name')
+    }
+
     setloading(true)
 
     const users = await fetchUser()
-    const user = users.find(user => user.name == name)
+    const user = users.find(user => user.name == name.toLowerCase())
 
     if (user) {
       dispatch(updateUser(user))
