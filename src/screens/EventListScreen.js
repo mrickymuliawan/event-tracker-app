@@ -11,7 +11,6 @@ import baseAxios from '../utils/baseAxios'
 const EventListScreen = ({ navigation }) => {
   const [isGrid, setisGrid] = useState(false)
   const [orderDesc, setorderDesc] = useState(false)
-  const [loading, setloading] = useState(false)
 
   const user = useSelector(state => state.user)
   const eventList = useSelector(state => state.event.list)
@@ -19,10 +18,8 @@ const EventListScreen = ({ navigation }) => {
 
   useEffect(() => {
     async function didMount() {
-      setloading(true)
       const res = await baseAxios.get('/events.json')
       dispatch(updateEvent(Object.values(res.data)))
-      setloading(false)
     }
 
     didMount()
@@ -49,7 +46,6 @@ const EventListScreen = ({ navigation }) => {
       </Row>
 
       <Col size={100} style={styles.container}>
-        {loading && <Text style={{ alignSelf: 'center' }}>Loading..</Text>}
         <View style={{ padding: Padding.sm, flexDirection: 'row', justifyContent: 'space-between' }}>
 
           <Text style={{ fontSize: FontSize.xl, fontWeight: 'bold' }}>Event List</Text>
