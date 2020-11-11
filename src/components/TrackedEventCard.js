@@ -1,13 +1,13 @@
 import React from 'react'
-import { Image, StyleSheet, Text } from 'react-native'
-import { Col, Row } from 'react-native-easy-grid'
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Col, Grid, Row } from 'react-native-easy-grid'
 import { Colors, FontSize, Margin, Padding } from '../styles'
 import { formatDate } from '../utils/helpers'
 import Section from './Section'
 
-const EventCard = ({ item, onPress }) => {
+const TrackedEventCard = ({ item, onPress, onRemove }) => {
   return (
-    <Row onPress={onPress} style={styles.listContainer}>
+    <Row style={styles.listContainer}>
       <Col size={50} style={{ marginRight: Margin.md, alignItems: 'center' }}>
         <Image style={styles.image} source={{ uri: item.imageUrl }} />
       </Col>
@@ -17,15 +17,21 @@ const EventCard = ({ item, onPress }) => {
         <Section>
           <Text>{formatDate(item.date)}</Text>
         </Section>
-        <Section>
-          <Text style={{ color: Colors.blue }}>See More</Text>
-        </Section>
+        <Row style={{ justifyContent: 'space-between' }}>
+
+          <TouchableOpacity onPress={onPress}>
+            <Text style={{ color: Colors.blue }}>See More</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onRemove}>
+            <Text style={{ color: Colors.red }}>Remove</Text>
+          </TouchableOpacity>
+        </Row>
       </Col>
     </Row>
   )
 }
 
-export default EventCard
+export default TrackedEventCard
 
 const styles = StyleSheet.create({
   listContainer: {
@@ -33,11 +39,11 @@ const styles = StyleSheet.create({
     padding: Padding.xxs,
   },
   title: {
-    fontSize: FontSize.xl,
+    fontSize: FontSize.md,
     fontWeight: 'bold'
   },
   subtitle: {
-    fontSize: FontSize.sm,
+    fontSize: FontSize.xs,
     color: Colors.darkGray
   },
   image: {

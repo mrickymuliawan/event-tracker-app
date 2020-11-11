@@ -4,10 +4,13 @@ import { TextInput } from 'react-native-gesture-handler'
 import { FontSize, Margin, Padding } from '../styles'
 import baseAxios from '../utils/baseAxios'
 import moment from 'moment'
+import { useDispatch } from 'react-redux'
+import { updateUser } from '../redux/userAction'
 
 const WelcomeScreen = (props) => {
   const [name, setName] = useState(null)
   const [loading, setloading] = useState(false)
+  const dispatch = useDispatch()
 
   const submit = async () => {
     setloading(true)
@@ -16,9 +19,8 @@ const WelcomeScreen = (props) => {
     const user = users.find(user => user.name == name)
 
     if (user) {
-      props.navigation.navigate('EventListScreen', {
-        user: user
-      })
+      dispatch(updateUser(user))
+      props.navigation.navigate('HomeDrawer')
     }
     else {
       const unix = moment().unix()
@@ -27,10 +29,8 @@ const WelcomeScreen = (props) => {
         name: name
       }
       const res = await baseAxios.patch(`/users/${unix}/.json`, body)
-
-      props.navigation.navigate('EventListScreen', {
-        user: res.data
-      })
+      dispatch(updateUser(res.data))
+      props.navigation.navigate('HomeDrawer')
     }
     setloading(false)
 

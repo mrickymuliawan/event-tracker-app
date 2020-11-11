@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 16,
     paddingHorizontal: Padding.xxs,
+    maxWidth: 200
   },
   title: {
     fontSize: FontSize.md,

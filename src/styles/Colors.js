@@ -10,6 +10,7 @@ const Colors = {
   darkGray: '#90A4AE',
   orange: '#FFCA28',
   darkOrange: '#FFA726',
-  lightOrange: '#FFE082'
+  lightOrange: '#FFE082',
+  red: '#E53935'
 }
 export default Colors

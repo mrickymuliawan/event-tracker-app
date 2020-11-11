@@ -1,47 +1,47 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { FlatList, Image, ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { Grid, Row } from 'react-native-easy-grid'
+import { useDispatch, useSelector } from 'react-redux'
 import EventCardTile from '../components/EventCardTile'
 import Section from '../components/Section'
+import { updateUser } from '../redux/userAction'
 import { FontSize, Padding } from '../styles'
 import baseAxios from '../utils/baseAxios'
-import { formatDate } from '../utils/helpers'
+import { currencyFormat, formatDate } from '../utils/helpers'
 
-const EventDetailScreen = ({ route }) => {
-  const [eventList, seteventList] = useState([])
-  const [loading, setloading] = useState(false)
-  const { item, user } = route.params
-
-  useEffect(() => {
-    async function didMount() {
-      const res = await baseAxios.get('/events.json')
-      seteventList(Object.values(res.data))
-    }
-
-    didMount()
-  }, [])
+const EventDetailScreen = ({ route, navigation }) => {
+  const user = useSelector(state => state.user)
+  const eventList = useSelector(state => state.event.list)
+  const dispatch = useDispatch()
+  const { item } = route.params
 
   const trackEvent = async () => {
-    setloading(true)
     let tracked = user.trackedEvents || []
-    tracked = [...tracked, item.id]
+
+    if (tracked.indexOf(item.id) === -1) {
+      tracked = [...tracked, item.id]
+    }
 
     const res = await baseAxios.patch(`/users/${user.id}/.json`, {
+      ...user,
       trackedEvents: tracked
     })
+
+    dispatch(updateUser(res.data))
+
     if (res.data) {
-      alert('Tracked Successfully')
+      alert('Added to Tracked List')
     }
-    setloading(false)
   }
 
   return (
-    <Grid >
-      <Row size={50}>
-        <Image source={{ uri: item.imageUrl }} style={styles.image} />
-      </Row>
-      <Row size={50}>
-        <ScrollView>
+
+    <ScrollView>
+      <Grid >
+        <Row size={10}>
+          <Image source={{ uri: item.imageUrl }} style={styles.image} />
+        </Row>
+        <Row size={50}>
 
           <View style={styles.container}>
             <Section>
@@ -54,7 +54,7 @@ const EventDetailScreen = ({ route }) => {
                   item.price == 0 ?
                     'Free Entry'
                     :
-                    'Rp.' + item.price
+                    currencyFormat(item.price)
                 }
               </Text>
             </Section>
@@ -68,23 +68,24 @@ const EventDetailScreen = ({ route }) => {
 
             <Section>
               <Text style={styles.subtitle}>Other Events</Text>
+
               <FlatList
                 horizontal={true}
-                key='grid'
                 data={eventList}
                 renderItem={({ item, index }) => <EventCardTile
                   item={item}
                   key={index}
-                  onPress={() => alert((123))}
+                  onPress={() => navigation.navigate('EventDetailScreen', { item })}
                 />}
                 keyExtractor={({ index }) => index} />
+
             </Section>
           </View>
-        </ScrollView>
 
-      </Row>
+        </Row>
 
-    </Grid>
+      </Grid>
+    </ScrollView>
   )
 }
 
@@ -103,8 +104,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   image: {
+    height: 250,
     width: '100%',
-    resizeMode: 'cover'
+    resizeMode: 'contain'
   },
   subtitle: {
     fontSize: FontSize.lg,
