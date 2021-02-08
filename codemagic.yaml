@@ -7,7 +7,7 @@ workflows:
         environment:
             vars:
                 XCODE_WORKSPACE: "EventTracker"
-                XCODE_SCHEME: "Debug"
+                XCODE_SCHEME: "EventTracker"
             node: latest
         scripts:
             - npm install
